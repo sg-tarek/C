@@ -1,0 +1,89 @@
+#include <ctype.h>
+#include <cs50.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+int count_letters(string word);
+int count_words(string word);
+int count_sentences(string word);
+
+int main(void)
+{
+    // Get input from the user
+    string sentence = get_string("Text: ");
+
+    // Count the number of letters
+    int letters = count_letters(sentence);
+
+    // Count the number of words
+    int words = count_words(sentence);
+
+    // Count the number of sentences
+    int sentences = count_sentences(sentence);
+
+    // Calculate the Coleman-Liau index
+    float index = 0.0588 * ((float) letters / words * 100) - 0.296 * ((float) sentences / words * 100) - 15.8;
+
+    // Print the grade
+    if (round(index) < 1)
+    {
+        printf("Before Grade 1\n");
+    }
+    else if (round(index) >= 16)
+    {
+        printf("Grade 16+\n");
+    }
+    else
+    {
+        printf("Grade %.0f\n", round(index));
+    }
+}
+
+// A function which counts the number of letters
+int count_letters(string word)
+{
+    int k = 0;
+    for (int i = 0, n = strlen(word); i < n; i++)
+    {
+        // Check that the input is alphabetical
+        if (isalpha(word[i]))
+        {
+            k += 1;
+        }
+    }
+
+    return k;
+}
+
+// A function which counts the number of words
+int count_words(string word)
+{
+    int k = 1; //We start at 1 given that the last word should be included
+    for (int i = 0, n = strlen(word); i < n; i++)
+    {
+        // Check that the input is alphabetical
+        if (word[i] == ' ')
+        {
+            k += 1;
+        }
+    }
+
+    return k;
+}
+
+// A function which counts the number of sentences
+int count_sentences(string word)
+{
+    int k = 0;
+    for (int i = 0, n = strlen(word); i < n; i++)
+    {
+        // Check that the input is alphabetical
+        if (word[i] == '.' || word[i] == '!' || word[i] == '?')
+        {
+            k += 1;
+        }
+    }
+
+    return k;
+}
