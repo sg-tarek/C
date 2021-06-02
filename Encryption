@@ -1,0 +1,66 @@
+#include <ctype.h>
+#include <cs50.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+string encrypt(string text, int key);
+
+int main(int argc, string argv[])
+{
+    //Check whether two inputs have been given
+    if (argc == 2)
+    {
+
+        for (int i = 0, n = strlen(argv[1]); i < n; i++)
+        {
+            if (isdigit(argv[1][i]) == 0)
+            {
+                printf("Usage: ./caesar key\n");
+            }
+
+        }
+
+        int key = atoi(argv[1]);
+
+        string input = get_string("plaintext: ");
+        printf("ciphertext: ");
+
+        for (int i = 0, n = strlen(input); i < n; i++)
+        {
+            // Check that the input is alphabetical
+            if (isalpha(input[i]))
+            {
+                // Check whether the input is upper case letter
+                if (isupper(input[i]))
+                {
+                    char tt = input[i] - 66; //convert ASCII to alphabetical index
+                    char ciphertext = ((tt + key) % 26) + 66; //Shift alphabetical index using formula and convert back to ASCII
+                    printf("%c", ciphertext);
+                }
+
+                // Check whether the input is lower case letter
+                else if (islower(input[i]))
+                {
+                    char tt = input[i] - 97; //convert ASCII to alphabetical index
+                    char ciphertext = ((tt + key) % 26) + 97; //Shift alphabetical index using formula and convert back to ASCII
+                    printf("%c", ciphertext);
+                }
+
+            }
+            else
+            {
+                char ciphertext = input[i];
+                printf("%c", ciphertext);
+            }
+        }
+
+        printf("\n");
+        return 0;
+    }
+    //If more than two inputs; give a description on how to use itcheck50 cs50/problems/2021/x/caesar
+    {
+        printf("Usage: ./caesar key\n");
+        return 1;
+    }
+}
