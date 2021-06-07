@@ -14,3 +14,6 @@ A program that encrypts messages using Caesar’s cipher. Supposedly, Caesar (ye
 
 <h3> Plurality </h3>
 A simple program which determines the winner of a plurality election and prints the name(s) of the winner(s).
+
+<h3> Runoff </h3>
+A program that runs a runoff election. Runoff is a ranked choice voting system. It has the benefit to provide a winner that better reflect the voters’ preference. To make that work, each voter rank the candidates in a preference list. If any candidate has a majority of the first vote preference, that candidate is declared the winner. If no candidate has more than 50% of the votes, an instant runoff takes place.
