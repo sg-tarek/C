@@ -17,3 +17,7 @@ A simple program which determines the winner of a plurality election and prints 
 
 <h3> Runoff </h3>
 A program that runs a runoff election. Runoff is a ranked choice voting system. It has the benefit to provide a winner that better reflect the voters’ preference. To make that work, each voter rank the candidates in a preference list. If any candidate has a majority of the first vote preference, that candidate is declared the winner. If no candidate has more than 50% of the votes, an instant runoff takes place.
+
+
+<h3> Volume </h3>
+A program which modify the volume of an audio file. By running "$ ./volume input.wav output.wav 2.0" I manage to read an input file and create an output file where the volume is changed by the chosen factor (in this case 2 - which doubles the volume).
