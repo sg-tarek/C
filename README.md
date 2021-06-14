@@ -21,3 +21,10 @@ A program that runs a runoff election. Runoff is a ranked choice voting system. 
 
 <h3> Volume </h3>
 A program which modify the volume of an audio file. By running "$ ./volume input.wav output.wav 2.0" I manage to read an input file and create an output file where the volume is changed by the chosen factor (in this case 2 - which doubles the volume).
+
+<h3> Filter </h3>
+A series of functions in C that apply various image filters to bmp inputs:
+- The grayscale function should take an image and turn it into a black and white version of the same image.
+- The sepia function should give images an old-timey feel by making the whole image look a bit reddish-brown.
+- The reflect function should take an image and reflect it horizontally.
+- The blur function should take an image and turn it into a box-blurred version of the same image.
