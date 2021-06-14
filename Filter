@@ -1,0 +1,139 @@
+#include "helpers.h"
+#include <math.h>
+#define BLUR 3
+
+// Convert image to grayscale
+void grayscale(int height, int width, RGBTRIPLE image[height][width])
+{
+    for (int i = 1; i <= height; i++)
+    {
+        for (int j = 1; j <= width; j++)
+        {
+            // Calculate the average
+            int average = round((image[height - i][width - j].rgbtBlue + image[height - i][width - j].rgbtGreen +
+                                 image[height - i][width - j].rgbtRed) / (float) 3);
+
+            // add the average color to each pixel
+            image[height - i][width - j].rgbtBlue = average;
+            image[height - i][width - j].rgbtGreen = average;
+            image[height - i][width - j].rgbtRed = average;
+        }
+    }
+
+    return;
+}
+
+// Convert image to sepia
+void sepia(int height, int width, RGBTRIPLE image[height][width])
+{
+    for (int i = 1; i <= height; i++)
+    {
+        for (int j = 1; j <= width; j++)
+        {
+
+            // calculate the red, green and blue sepia color with the formular for each color
+            int sepiaRed = round(.393 * image[height - i][width - j].rgbtRed + .769 * image[height - i][width - j].rgbtGreen + .189 *
+                                 image[height - i][width - j].rgbtBlue);
+            int sepiaGreen = round(.349 * image[height - i][width - j].rgbtRed + .686 * image[height - i][width - j].rgbtGreen + .168 *
+                                   image[height - i][width - j].rgbtBlue);
+            int sepiaBlue = round(.272 * image[height - i][width - j].rgbtRed + .534 * image[height - i][width - j].rgbtGreen + .131 *
+                                  image[height - i][width - j].rgbtBlue);
+
+            // making sure the average is within 255
+            if (sepiaRed > 255)
+            {
+                sepiaRed = 255;
+            }
+
+            if (sepiaGreen > 255)
+            {
+                sepiaGreen = 255;
+            }
+
+            if (sepiaBlue > 255)
+            {
+                sepiaBlue = 255;
+            }
+
+            image[height - i][width - j].rgbtBlue = sepiaBlue;
+            image[height - i][width - j].rgbtGreen = sepiaGreen;
+            image[height - i][width - j].rgbtRed = sepiaRed;
+        }
+    }
+
+    return;
+}
+
+// Reflect image horizontally
+void reflect(int height, int width, RGBTRIPLE image[height][width])
+{
+    for (int i = 1; i <= height; i++)
+    {
+        for (int j = 1, k = width; j <= width / 2; j++, k--)
+        {
+            // make a temporary variable in order to switch
+            RGBTRIPLE tmp = image[height - i][width - j];
+
+            image[height - i][width - j] = image[height - i][width - k];
+
+            image[height - i][width - k] = tmp;
+        }
+    }
+
+    return;
+}
+
+// Blur image
+void blur(int height, int width, RGBTRIPLE image[height][width])
+{
+    RGBTRIPLE copy_image[height][width]; // copy the original image
+    double averageBlue, averageGreen, averageRed;
+    int stat;
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            averageBlue = averageGreen = averageRed = stat = 0;
+
+            // Box Blur
+            for (int rows = i - ((BLUR - 1) / 2); rows <= i + ((BLUR - 1) / 2); rows++)
+            {
+                for (int cols = j - ((BLUR - 1) / 2); cols <= j + ((BLUR - 1) / 2); cols++)
+                {
+                    if ((rows >= 0 && rows < height) && (cols >= 0 && cols < width))
+                    {
+                        averageBlue += image[rows][cols].rgbtBlue;
+                        averageGreen += image[rows][cols].rgbtGreen;
+                        averageRed += image[rows][cols].rgbtRed;
+                        stat++;
+                    }
+                }
+            }
+            if (stat != 0)
+            {
+                averageBlue =  round(averageBlue / (double) stat);
+                averageGreen = round(averageGreen / (double) stat);
+                averageRed = round(averageRed / (double) stat);
+
+                copy_image[i][j].rgbtBlue = averageBlue;
+                copy_image[i][j].rgbtGreen = averageGreen;
+                copy_image[i][j].rgbtRed = averageRed;
+            }
+            else
+            {
+                return;
+            }
+        }
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            image[i][j] = copy_image[i][j];
+        }
+    }
+
+    return;
+}
