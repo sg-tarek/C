@@ -35,3 +35,6 @@ A series of functions in C that apply various image filters to bmp inputs:
 
 <h3> Recover </h3>
 A program that can recover JPEG images from a forensic file. The program must accept one and only one command line argument, the name of the file the images will be recovered from. The program should output each of the JPEG images recovered as a separate file. There are 50 in total to be recovered from the card.raw file provided.
+
+<h3> Inheritance </h3>
+A program that determines a person's blood type based on parents. A person’s blood type is determined by two alleles (i.e., different forms of a gene). The three possible alleles are A, B, and O, of which each person has two (possibly the same, possibly different). Each of a child’s parents randomly passes one of their two blood type alleles to their child. The possible blood type combinations, then, are: OO, OA, OB, AO, AA, AB, BO, BA, and BB.
