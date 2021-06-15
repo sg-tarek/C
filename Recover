@@ -1,0 +1,93 @@
+// Recover JPEG files from a card
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+// Number of bytes in .JPEG picture
+const int JPEGs_SIZE = 512;
+
+// Create a new data type called BYTE representing an 8-bit unsigned integer
+typedef uint8_t BYTE;
+
+int main(int argc, char *argv[])
+{
+    // make sure program is executed with two program line arguments
+    if (argc != 2)
+    {
+        printf("Usage: ./recover card.raw\n");
+        return 1;
+    }
+
+    // Open files and inform user if file cannot open
+    FILE *file = fopen(argv[1], "r"); // read from the file
+    if (file == NULL)
+    {
+        printf("Could not open card.\n");
+        return 1;
+    }
+
+    // creating a buffer to store a block of bytes
+    BYTE buffer[JPEGs_SIZE];
+
+    // JPEG counter and file initializer
+    int JPEG_count = 0;
+    FILE *img = NULL;
+
+    // Check if JPEG is found
+    int jpg_has_alr_been_found = 0; //False
+
+    // keep reading a block of 512 bytes into a buffer
+    // The fread() function will keep returning 1 until there are records in the file.
+    // As soon as the end of the file is encountered fread() will return a value less than 1
+    // and the condition in the while loop become false and the control comes out of the while loop.
+    while (fread(&buffer, JPEGs_SIZE, 1, file) == 1)
+    {
+
+        // check whether block is a start of a JPEG file, by analyzing first four bytes
+        // (buffer[3] & 0xf0) == 0xe0 looks at first four bits and sets remaining four bits to zero
+        if (buffer[0] == 0xff && buffer[1] == 0xd8 && buffer[2] == 0xff && (buffer[3] & 0xf0) == 0xe0)
+        {
+
+            // If new JPEG has been found
+            if (jpg_has_alr_been_found == 1)
+            {
+                // Start of an image has been found, so close current (/previous) image
+                fclose(img);
+            }
+
+            // if first JPEG, create a new first file and write in it
+            else
+            {
+                // new JPEG discovered and we can write on file
+                jpg_has_alr_been_found = 1;
+            }
+
+            // the filename consists of “001.jpg” + \n meaning 8 characters (if number of JPEG is < 999)
+            char filename[8];
+            sprintf(filename, "%03i.jpg", JPEG_count); // formatted output
+
+            img = fopen(filename, "w"); // write to the file (and create if not existent)
+            JPEG_count++; // update counter
+
+        }
+
+        // if we already start
+        if (jpg_has_alr_been_found == 1)// once new JPEGS are found
+        {
+            fwrite(&buffer, JPEGs_SIZE, 1, img);
+
+        }
+
+    }
+
+    // close the files when they’re no longer in use
+    fclose(img);
+    fclose(file);
+
+}
+
+// The loop start by ignoring any non-JPEG files, which do not contain signature.
+// When first JPEG signature has been located "jpg_has_alr_been_found" becomes TRUE,
+// new image gets created and the last if statement writes data to the image.
+// Afterward we will keep writing to the same image until new signature has been spotted.
