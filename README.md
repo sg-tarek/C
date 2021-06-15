@@ -32,3 +32,6 @@ A series of functions in C that apply various image filters to bmp inputs:
 - The reflect function should take an image and reflect it horizontally.
 
 - The blur function should take an image and turn it into a box-blurred version of the same image.
+
+<h3> Recover </h3>
+A program that can recover JPEG images from a forensic file. The program must accept one and only one command line argument, the name of the file the images will be recovered from. The program should output each of the JPEG images recovered as a separate file. There are 50 in total to be recovered from the card.raw file provided.
